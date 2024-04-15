@@ -31,6 +31,54 @@ contract ExploitContract {
 
     function Exploiter() public view returns (uint8) {
         uint8 n;
+        
+        for(uint8 i = 0; i< 32; i++){
+            if(keccak256(abi.encodePacked(i))==answerHash)
+             n = i;
+        }
+        
+        // {
+        //   for(uint8 i = 32; i< 64; i++){
+        //     if(keccak256(abi.encodePacked(i))==answerHash)
+        //      n = i;
+        // }
+        // }
+        // {
+        //   for(uint8 i = 64; i< 96; i++){
+        //     if(keccak256(abi.encodePacked(i))==answerHash)
+        //      n = i;
+        // }
+        // }
+        // {
+        //   for(uint8 i = 96; i< 128; i++){
+        //     if(keccak256(abi.encodePacked(i))==answerHash)
+        //      n = i;
+        // }
+        // }
+        // {
+        //   for(uint8 i = 128; i< 160; i++){
+        //     if(keccak256(abi.encodePacked(i))==answerHash)
+        //      n = i;
+        // }
+        // }
+        // {
+        //   for(uint8 i = 160; i< 192; i++){
+        //     if(keccak256(abi.encodePacked(i))==answerHash)
+        //      n = i;
+        // }
+        // }
+        // {
+        //   for(uint8 i = 192; i< 224; i++){
+        //     if(keccak256(abi.encodePacked(i))==answerHash)
+        //      n = i;
+        // }
+        // }
+        // {
+        //   for(uint8 i = 224; i< 256; i++){
+        //     if(keccak256(abi.encodePacked(i))==answerHash)
+        //      n = i;
+        // }
+        // }
         return n;
     }
 }
